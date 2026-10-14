@@ -1,11 +1,17 @@
+# PARA INSTALAR O PACOTE--------------------------------------------------------
+
 # install.packages("ggbump")
 devtools::install_github("davidsjoberg/ggbump")
 
+
+# carregando bibliotecas
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggbump)
 
+
+#  dados fictícios (adaptar para o seu caso, mas a estrutura deve ser a mesma)--
 estados_br <- c(
   "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", 
   "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", 
@@ -62,12 +68,14 @@ dados_grafico <- df_2023 |>
     by = "nome_uf"
   )
 
+# definindo paleta de cores-----------------------------------------------------
  paleta <- c(
   "SUBIU"      = "#0284a5",
   "CAIU"       = "#9e1d47",
   "SE MANTEVE" = "#e0a32e"
 )
 
+# aqui começa o gráfico---------------------------------------------------------
 ggplot(dados_grafico) +
   geom_sigmoid(
     aes(x = 1.3, xend = 8, y = y_2023, yend = y_2024, colour = status),
@@ -79,6 +87,7 @@ ggplot(dados_grafico) +
       length = unit(0.12, "inches")
     )
   ) +
+  # lado esquerdo
   geom_text(
     aes(x = 0.2, y = y_2023, label = nome_uf),
     family = "Avenir Next Medium",
@@ -92,6 +101,7 @@ ggplot(dados_grafico) +
     colour = "#64748b",
     hjust = 1
   ) +
+  # lado direito
   geom_text(
     aes(x = 9.10, y = y_2024, label = nome_uf),
     family = "Avenir Next Medium",
@@ -125,6 +135,7 @@ ggplot(dados_grafico) +
     color = NULL
   ) + 
   theme_void(base_size = 14) +
+  # adiciona legenda 
   geom_segment(
     aes(x = 1.3, xend = 8, y = y_2023, yend = y_2024, colour = status),
     alpha = 0
@@ -138,6 +149,7 @@ ggplot(dados_grafico) +
     )
   ) +
   scale_color_manual(values = paleta) +
+  # altera o tema e estética
   theme(
     legend.position = "top",
     legend.justification = "left",
@@ -151,6 +163,8 @@ ggplot(dados_grafico) +
                                    colour = "#1e293b", margin = margin(t = 20, b = 5))
     
   )
+
+# salva o plot -----------------------------------------------------------------
   
 ggsave(last_plot(), file = "ranking.png", width = 10.5, height = 15, dpi = 300, 
        units = "in")
